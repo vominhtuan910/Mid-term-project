@@ -1,1 +1,1 @@
-# My-first-project
+Mid-term project
