@@ -1,1 +1,0 @@
-Mid-term project
