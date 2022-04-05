@@ -5,7 +5,7 @@
 #include <conio.h>
 using namespace std;
 
-#define MENU_LIST 4
+#define MENU_LIST 3
 #define NumOfModes 2
 
 void SET_COLOR(int color)
@@ -42,7 +42,7 @@ void Mode_Menu() {
         SET_COLOR(11);
 		cout << "\t\t\tWHICH MODE DO YOU WANT TO PLAY ?\n\n";
         SET_COLOR(14);
-		cout << "\t\t\t\t1. Standard \n";
+		cout << "\t\t\t\t1. Normal \n";
 		cout << "\t\t\t\t2. Difficult ";
         SET_COLOR(7);
 		cout << "\n\n[*] Use UP and DOWN arrow keys to select\n";
@@ -60,7 +60,7 @@ void Mode_Menu() {
                     break;
 			default:
                     //Difficult_Mode();
-				break;
+		    break;
 			}
 		}
         
@@ -91,8 +91,7 @@ void Main_Menu()
 		SET_COLOR(11);
 		cout << "\t\t\t+\t\t1> Start game		  +\n";
 		cout << "\t\t\t+\t\t2> Leaderboard		  +\n";
-		cout << "\t\t\t+\t\t3> Highest scores	  +\n";
-		cout << "\t\t\t+\t\t4> Exit			  +\n";
+		cout << "\t\t\t+\t\t3> Quit			  +\n";
 		SET_COLOR(14);
 		cout << "\t\t\t+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+--+-+-+-+-+- \n";
 		SET_COLOR(7);
@@ -113,9 +112,8 @@ void Main_Menu()
 			case 2:
 				Leaderboard();
 				break;
-            case 4:
-                exit(0);
-
+           		 case 4:
+                		exit(0);
 			default:
 				break;
 			}	
