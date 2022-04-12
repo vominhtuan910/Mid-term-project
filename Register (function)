@@ -28,7 +28,8 @@ void Register()
 		SET_COLOR(3);
 		cout << "-Enter PASSWORD: ";
 		SET_COLOR(7);
-
+		pass = "";
+		
 		// INPUT PASSWORD
 		while (1)
 		{
@@ -53,7 +54,8 @@ void Register()
 		SET_COLOR(3);
 		cout << "-Confirm PASSWORD: ";
 		SET_COLOR(7);
-
+		pass_confirm = "";
+		
 		// CONFIRM PASSWORD
 		while (1)
 		{
