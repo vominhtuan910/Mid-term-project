@@ -1,10 +1,9 @@
 void Login(string &user, string &pass)
 {
 	char temp;
-	string user_test, pass_test;
+	string pass_test = "";
 	int flag = 0;
-	int limit = 1;
-
+	int limit = 0;
 	do
 	{
 		system("cls");
@@ -17,7 +16,9 @@ void Login(string &user, string &pass)
 		SET_COLOR(3);
 		cout << "-PASSWORD: ";
 		SET_COLOR(7);
+		pass = "";
 
+		// REPRESENT THE PASSWORD WITH THE CHARACTER '*'
 		while (1)
 		{
 			temp = _getch();
@@ -43,21 +44,20 @@ void Login(string &user, string &pass)
 		if (Check)
 		{
 			getline(Check, pass_test);
-			flag = 1;
+			Check.close();
 		}
-		Check.close();
 
-		if (pass_test == pass)
+		if (pass.compare(pass_test) == 0)
 		{
+			flag = 1;
 			SET_COLOR(10);
 			cout << "\t--> Login successfully!\n";
 			Sleep(1000);
 			SET_COLOR(7);
 			cout << "\nPlease wait a moment...........................................";
 			Sleep(1500);
-			Main_Menu();
+			break;
 		}
-
 		else
 		{
 			SET_COLOR(4);
@@ -67,23 +67,30 @@ void Login(string &user, string &pass)
 		}
 	} while (limit <= 5);
 
-	// ASKING USER FOR CREATING NEW ACCOUNT
-	SET_COLOR(14);
-	cout << "\t\t\n\nYOU DO NOT HAVE AN ACCOUNT ?";
-	cout << "\t\t\nPlease create one!\n";
-	SET_COLOR(8);
-	cout << "[*] Press 1 for YES or 2 for NO";
-	while(1)
+	if (flag == 1)
+		Main_Menu();
+	else
 	{
-		char choice = _getch();
-		switch(choice){
+		// ASKING USER FOR CREATING NEW ACCOUNT
+		SET_COLOR(14);
+		cout << "\t\t\n\nYOU DO NOT HAVE AN ACCOUNT ?";
+		cout << "\t\t\nPlease create one!\n";
+		SET_COLOR(8);
+		cout << "[*] Press 1 for YES or 2 for NO";
+		while (1)
+		{
+			char choice = _getch();
+			switch (choice)
+			{
 			case '1':
 				Register();
 				break;
 			case '2':
 				Login_Menu();
+				break;
 			default:
 				continue;
+			}
 		}
 	}
 }
