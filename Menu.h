@@ -601,3 +601,20 @@ void Leaderboards()
 	_getch();
 	Main_Menu();
 }
+
+void Ending_Screen(){
+    system("cls");
+    SET_COLOR(14);
+    string draw;
+    ifstream read("Ending_Screen.txt");
+    while (!read.eof())
+    {
+        getline(read,draw);
+        cout << draw << "\n";
+        Sleep(200);
+    }
+    read.close();
+    cout <<"\n\n\n";
+    system("pause");
+    Game();
+}
