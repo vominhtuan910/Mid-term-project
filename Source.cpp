@@ -397,6 +397,6 @@ void Game()
 int main()
 {
     ::SendMessage(::GetConsoleWindow(), WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
-    mkdir("Acccount); // creating "Account" folder
+    mkdir("Account"); // creating "Account" folder
     Login_Menu();
 }
