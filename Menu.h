@@ -1,13 +1,12 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <Windows.h>
 #include <fstream>
 #include <conio.h>
 #include <cstdlib>
+#include <sstream>
 using namespace std;
-
-#define MENU_LIST 4
-#define NUM_OF_MODES 2
 
 // DECLARATION
 struct Player
@@ -24,8 +23,28 @@ void Leaderboards();
 void Login_Menu();
 void Main_Menu();
 void Personal_Record(Player P);
-
+void Game();
 ///////////////////////////////////////////////////////////
+
+string Convert_Time(int time)
+{
+	int h, m, s;
+	string res;
+
+	h = time / 3600;
+	m = time % 3600 / 60;
+	s = time - 3600*h - 60*m;
+
+	res = to_string(h);
+	res.append("h ");
+	res.append(to_string(m));
+	res.append("m ");
+	res.append(to_string(s));
+	res.append("s");
+
+	return res; 
+}
+
 void SET_COLOR(int color)
 {
 	WORD wColor;
@@ -52,7 +71,7 @@ void Register()
 		SET_COLOR(3);
 		cout << "-Enter USER ID: ";
 		SET_COLOR(7);
-		getline(cin, user);
+		cin >> user;
 
 		// CHECK WHETHER USERNAME HAS EXISTED
 		mark = false;
@@ -75,7 +94,9 @@ void Register()
 		while (1)
 		{
 			temp = _getch();
-			if (temp == '\r')
+			if (temp == 27)
+				Login_Menu();
+			else if (temp == '\r')
 			{
 				cout << "\n";
 				break;
@@ -101,7 +122,9 @@ void Register()
 		while (1)
 		{
 			temp_conf = _getch();
-			if (temp_conf == '\r')
+			if (temp == 27)
+				exit(0);
+			else if (temp_conf == '\r')
 			{
 				cout << "\n";
 				break;
@@ -129,6 +152,7 @@ void Register()
 			F.close();
 			///////////////////////////////////////////////////////
 			SET_COLOR(10);
+			cout << (char)7;
 			cout << "\n---> Register successfully!\n";
 			Sleep(1000);
 			SET_COLOR(7);
@@ -160,7 +184,7 @@ void Login(string &user, string &pass)
 		SET_COLOR(3);
 		cout << "-USER ID: ";
 		SET_COLOR(7);
-		getline(cin, user);
+		cin >> user;
 		SET_COLOR(3);
 		cout << "-PASSWORD: ";
 		SET_COLOR(7);
@@ -170,7 +194,9 @@ void Login(string &user, string &pass)
 		while (1)
 		{
 			temp = _getch();
-			if (temp == '\r') // '\r' is ENTER
+			if (temp == 27) // the ASCII code of ESC is 27
+				Login_Menu();
+			else if (temp == '\r') // '\r' is ENTER
 			{
 				cout << "\n";
 				break;
@@ -200,6 +226,7 @@ void Login(string &user, string &pass)
 			flag = 1;
 			SET_COLOR(10);
 			cout << "\t--> Login successfully!\n";
+			cout << (char)7;
 			Sleep(1000);
 			SET_COLOR(7);
 			cout << "\nPlease wait a moment...........................................";
@@ -242,60 +269,10 @@ void Login(string &user, string &pass)
 	}
 }
 
-void Mode_Menu()
-{
-	int flag = 1;
-	int opt = 1;
-	while (1)
-	{
-		system("cls");
-		cout << "\n\n";
-		SET_COLOR(11);
-		cout << "\t\t\tWHICH MODE DO YOU WANT TO PLAY ?\n\n";
-		SET_COLOR(14);
-		cout << "\t\t\t\t1. Standard \n";
-		cout << "\t\t\t\t2. Difficult ";
-		SET_COLOR(7);
-		cout << "\n\n[*] Use UP and DOWN arrow keys to select\n";
-		cout << "\nYour choice [1-" << MENU_LIST << "]: ";
-		SET_COLOR(14);
-		cout << opt;
-
-		char ch = _getch();
-		if (ch == 13)
-		{
-			flag = 0;
-			switch (opt)
-			{
-			case 1:
-				// Basic_Mode();
-				break;
-			default:
-				// Difficult_Mode();
-				break;
-			}
-		}
-
-		else if (ch == 80)
-			opt++;
-		else if (ch == 72)
-			opt--;
-
-		if (opt < 1)
-			opt = NUM_OF_MODES;
-		else if (opt > NUM_OF_MODES)
-			opt = 1;
-
-		if (flag == 0)
-			break;
-	}
-}
-
 void Main_Menu()
 {
-	int opt = 1;
-	int flag = 1;
-	while (1)
+	char opt;
+	do
 	{
 		system("cls");
 		SET_COLOR(14);
@@ -304,53 +281,39 @@ void Main_Menu()
 		cout << "\t\t\t+\t\t1> Start game		  +\n";
 		cout << "\t\t\t+\t\t2> Leaderboards		  +\n";
 		cout << "\t\t\t+\t\t3> Personal record	  +\n";
-		cout << "\t\t\t+\t\t4> Exit			  +\n";
+		cout << "\t\t\t+\t\t4> Quit			  +\n";
 		SET_COLOR(14);
 		cout << "\t\t\t+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+--+-+-+-+-+- \n";
 		SET_COLOR(7);
-		cout << "\n[*] Use UP and DOWN arrow keys to select\n";
-		cout << "\nYour choice [1-" << MENU_LIST << "]: ";
-		SET_COLOR(14);
-		cout << opt;
+		cout << "\n[*] Please press the corresponding number to select";
 
-		char p = _getch();
-		if (p == 13)
+		opt = _getch();
+		switch (opt)
 		{
-			flag = 0;
-			switch (opt)
-			{
-			case 1:
-				Mode_Menu();
-				break;
-			case 2:
-				Leaderboards();
-				break;
-			case 3:
-				Personal_Record(P);
-			default:
-				exit(0);
-			}
-		}
-		else if (p == 80)
-			opt++;
-		else if (p == 72)
-			opt--;
-
-		if (opt > MENU_LIST)
-			opt = 1;
-		else if (opt < 1)
-			opt = MENU_LIST;
-
-		if (flag == 0)
+		case '1':
+			Game();
 			break;
-	}
+		case '2':
+			Leaderboards();
+			break;
+		case '3':
+			Personal_Record(P);
+			break;
+		case '4':
+			exit(0);
+			break;
+		case 27:
+			Login_Menu();
+		default:
+			continue;
+		}
+	} while (1);
 }
 
 void Login_Menu()
 {
-	int func = 1;
-	int flag = 1;
-	while (1)
+	char func;
+	do
 	{
 		system("cls");
 		SET_COLOR(14);
@@ -358,115 +321,283 @@ void Login_Menu()
 		SET_COLOR(11);
 		cout << "\t\t\t+\t\t1> Register			+\n";
 		cout << "\t\t\t+\t\t2> Login			+\n";
-		cout << "\t\t\t+\t\t3> Exit				+\n";
+		cout << "\t\t\t+\t\t3> Quit				+\n";
 		SET_COLOR(14);
 		cout << "\t\t\t+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+-\n";
 		SET_COLOR(7);
-		cout << "\n[*] Use UP and DOWN arrow keys to select\n";
-		cout << "\nYour choice [1 - 3]: ";
-		SET_COLOR(11);
-		cout << func;
+		cout << "\n[*] Please press the corresponding number to select";
 
-		char p = _getch();
-		if (p == 13)
+		func = _getch();
+		switch (func)
 		{
-			flag = 0;
-			switch (func)
-			{
-			case 1:
-				Register();
-				break;
-			case 2:
-				Login(P.user, P.pass);
-				break;
-			case 3:
-				exit(0);
-			default:
-				cout << "\n\t!!! Invalid choice !!!\n";
-			}
-		}
-		else if (p == 80)
-		{
-			func++;
-		}
-		else if (p == 72)
-		{
-			func--;
-		}
-
-		if (func > 3)
-			func = 1;
-		else if (func < 1)
-			func = 3;
-
-		if (flag == 0)
+		case '1':
+			Register();
 			break;
-	}
+		case '2':
+			Login(P.user, P.pass);
+			break;
+		case '3':
+		case 27:
+			exit(0);
+			break;
+		default:
+			continue;
+		}
+	} while (1);
 }
 
-void Save_Record(Player p)
+void Save_Record(Player P, int timer, bool isDiff)
 {
-	ofstream Read("Account\\" + p.user + ".txt", ios::app);
-	
+	ofstream Read("Account\\" + P.user + ".txt", ios::app);
+	ofstream Print("LDB.txt", ios::app);
+	P.time = timer;
+
+	if (!isDiff)
+		P.mode = "Normal";
+	else
+		P.mode = "Difficult";
+
 	// WRITE INFORMATION INTO FILE
-	Read << p.time << "-" << p.mode << "\n";
+	Read.flush();
+	Read << P.time << "-" << P.mode << "\n";
+	Print.flush();
+	Print << P.user << "-" << P.time << "-" << P.mode << "\n"; 
+
 	Read.close();
+	Print.close();
 }
 
 void Personal_Record(Player P)
 {
+	system("cls");
+	SET_COLOR(14);
+	cout <<"\n\n";
+	cout << left << setw(20) << "BEST TIME";
+	cout << left << setw(20) << "MODE";
+	cout << "\n-----------------------------------------------------------------\n";
+
+
 	ifstream F("Account\\" + P.user + ".txt");
 	int numLines = 0;
-	getline(F, P.pass);
-
+	string s;
 	// COUNT THE NUMBER OF LINES OF FILE FROM THE PASSWORD LINE
-	char c;
-	F.get(c);
-	while (!F.eof())
+	while (getline(F,s))
 	{
-		if(c=='\n')
-			numLines++;
-		F.get(c);
+		numLines++;
 	}
+	numLines--; // the fisrt line is PASSWORD
 
-	// MOVE THE POSITION POINTER TO THE BEGINNING OF THE FILE
+	// MOVE THE POSITION POINTER TO THE BEGINNING OF THE FIRST LINE STORES TIME
 	F.clear();
-	F.seekg(0,ios::beg);
-	F.seekg(P.pass.length()+1,ios::cur);
+	F.seekg(0, ios::beg);
+	F.seekg(P.pass.length() + 1, ios::cur);
 	/////////////////////////////////////////////////////////////////////
+	
+	string temp1, temp2;
+	int cnt1 = 0, cnt2 = 0;
+	Player exchange;
 
-	string temp;
-	Player *Record = new Player[numLines];
+	Player *Norm = new Player[numLines];
+	Player *Diff = new Player[numLines];
 
-	for(int i = 0; i < numLines; i++)
+	// GET THE TIME AND MODE FROM FILE
+	
+	for (int i = 0; i < numLines; i++)
 	{
-		getline(F,temp,'-');
-		getline(F, Record[i].mode);
-		Record[i].time = stoi(temp);
-	}
+		getline(F, temp1, '-');
+		getline(F, temp2);
 
-	// SORT TO GET THE SHORTEST TIME
-	for (int i = 0; i < numLines-1; i++)
-	{
-		for (int j = i+1; j < numLines; j++)
+		if (temp2 == "Normal")
 		{
-			if(Record[i].time < Record[j].time)
+			Norm[cnt1].time = stoi(temp1);
+			Norm[cnt1].mode = "Normal";
+			cnt1++;
+		}
+		else if (temp2 == "Difficult")
+		{
+			Diff[cnt2].time = stoi(temp1);
+			Diff[cnt2].mode = "Difficult";
+			cnt2++;
+		}
+	}
+	// SORT TO GET THE SHORTEST TIME
+	if (cnt1 > 0)
+	{
+		if (cnt1 > 1)
+		{
+			for (int i = 0; i < cnt1 - 1; i++)
 			{
-				Player temp = Record[i];
-				Record[i] = Record [j];
-				Record[j] = temp; 
+				for (int j = i + 1; j < cnt1; j++)
+				{
+					if (Norm[i].time > Norm[j].time)
+					{
+						Player temp = Norm[i];
+						Norm[i] = Norm[j];
+						Norm[j] = exchange;
+					}
+				}
 			}
 		}
-		
+		SET_COLOR(7);
+		string cvt = Convert_Time(Norm[0].time);
+		cout << left << setw(20) << cvt;
+		cout << left << setw(20) << Norm[0].mode;
+		cout << "\n";
 	}
-	system("cls");
-	cout << Record[0].time << "-" << Record[0].mode << endl;
-	delete [] Record;
+
+	if (cnt2 > 0)
+	{
+		if (cnt2 > 1)
+		{
+			for (int i = 0; i < cnt2 - 1; i++)
+			{
+				for (int j = i + 1; j < cnt2; j++)
+				{
+					if (Diff[i].time > Diff[j].time)
+					{
+						exchange = Diff[i];
+						Diff[i] = Diff[j];
+						Diff[j] = exchange;
+					}
+				}
+			}
+		}
+		SET_COLOR(7);
+		string cvt = Convert_Time(Diff[0].time);
+		cout << left << setw(20) << cvt;
+		cout << left << setw(20) << Diff[0].mode;
+		cout << "\n";
+	}
+	////////////////////////////////////////////////////
 	F.close();
-	system("pause");
+	getch();
+	delete[] Norm;
+	delete[] Diff;
+	Main_Menu();
 }
 
 void Leaderboards()
 {
-	
+	Player exchange;
+	system("cls");
+	SET_COLOR(14);
+	cout << "\n\n";
+	cout << left << setw(20) << "USERNAME";
+	cout << left << setw(20) << "TIME";
+	cout << left << setw(20) << "MODE";
+	cout << "\n-----------------------------------------------------------------\n";
+
+	ifstream Print("LDB.txt");
+	int numLines = 0;
+	string s;
+	// COUNT THE NUMBER OF LINES OF FILE FROM THE PASSWORD LINE
+	while (getline(Print,s))
+	{
+		numLines++;
+	}
+	// MOVE THE POSITION POINTER TO THE BEGINNING OF THE FILE
+	Print.clear();
+	Print.seekg(0, ios::beg);
+	/////////////////////////////////////////////////////////////////////
+
+	string temp1, temp2, temp3;
+	int cnt1 = 0, cnt2 = 0;
+
+	Player *Norm = new Player[numLines];
+	Player *Diff = new Player[numLines];
+
+	// GET THE TIME AND MODE FROM FILE
+	for (int i = 0; i < numLines; i++)
+	{
+		getline(Print, temp3,'-');
+		getline(Print, temp1, '-');
+		getline(Print, temp2);
+
+		if (temp2 == "Normal")
+		{
+			Norm[cnt1].time = stoi(temp1);
+			Norm[cnt1].mode = temp2;
+			Norm[cnt1].user = temp3;
+			cnt1++;
+		}
+		else if(temp2 == "Difficult")
+		{
+			Diff[cnt2].time = stoi(temp1);
+			Diff[cnt2].mode = temp2;
+			Diff[cnt2].user = temp3;
+			cnt2++;
+		}
+	}
+	// SORT TO GET THE SHORTEST TIME
+	if (cnt1 > 0)
+	{
+		for (int i = 0; i < cnt1 - 1; i++)
+		{
+			if (Norm[i].time == 0)
+				break;
+
+			for (int j = i + 1; j < cnt1; j++)
+			{
+				if (Norm[i].time > Norm[j].time)
+				{
+					exchange = Norm[i];
+					Norm[i] = Norm[j];
+					Norm[j] = exchange;
+				}
+			}
+		}
+		SET_COLOR(7);
+		int lim = 0; 
+		for (int i = 0; i < cnt1; i++)
+		{
+			string cvt = Convert_Time(Norm[i].time);
+			cout << left << setw(20) << Norm[i].user;
+			cout << left << setw(20) << cvt;
+			cout << left << setw(20) << Norm[i].mode;
+			cout << "\n";
+
+			lim++;
+			if(lim > 10) break; // Print 10 best player of Normal mode
+		}
+	}
+	cout << "\n-----------------------------------------------------------------\n\n";
+
+	if (cnt2 > 0)
+	{
+		for (int i = 0; i < cnt2 - 1; i++)
+		{
+			if (Diff[i].time == 0)
+				break;
+
+			for (int j = i + 1; j < cnt2; j++)
+			{
+				if (Diff[i].time > Diff[j].time)
+				{
+					exchange = Diff[i];
+					Diff[i] = Diff[j];
+					Diff[j] = exchange;
+				}
+			}
+		}
+		SET_COLOR(7);
+		int lim = 0;
+		for (int i = 0; i < cnt2; i++)
+		{
+			string cvt = Convert_Time(Diff[0].time);
+			cout << left << setw(20) << Diff[0].user;
+			cout << left << setw(20) << cvt;
+			cout << left << setw(20) << Diff[0].mode;
+			cout << "\n";
+
+			lim++;
+			if(lim>10) break;
+		}
+		
+	}
+	////////////////////////////////////////////////////
+	Print.close();
+	delete[] Norm;
+	delete[] Diff;
+	_getch();
+	Main_Menu();
 }
