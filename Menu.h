@@ -621,7 +621,32 @@ void Ending_Screen(){
 	Game();
 }
 
-// void Starting_Screen()
-// {
-// 	ifstream draw("")
-// }
+void Starting_Screen()
+{
+	string draw;
+
+	ifstream S1("Starting_Screen\\St1.txt");
+	SET_COLOR(13);
+	while (!S1.eof())
+    {
+        getline(S1,draw);
+        cout << draw << "\n";
+        Sleep(200);
+    }
+	S1.close();
+
+	ifstream S2("Starting_Screen\\St2.txt");
+	SET_COLOR(14);
+	while (!S2.eof())
+    {
+        getline(S2,draw);
+        cout << draw << "\n";
+        Sleep(200);
+    }
+	S2.close();
+
+	Sleep(1000);
+	SET_COLOR(7);
+	cout << "\n\nPlease wait a moment.................................................";
+	Sleep(2500);
+}
