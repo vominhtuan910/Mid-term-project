@@ -1,7 +1,7 @@
 #include <iostream>
 #include <conio.h>
 #include <windows.h>
-#include <direct.h>
+#include <direct.h> // for creating folder automatically
 // My header file
 #include "Checking.h"
 #include "Display.h"
@@ -398,6 +398,6 @@ void Game()
 int main()
 {
     ::SendMessage(::GetConsoleWindow(), WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
-    mkdir("Account");
+    mkdir("Account"); // creating folder "Account"
     Login_Menu();
 }
