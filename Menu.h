@@ -241,13 +241,13 @@ void Login(string &user, string &pass)
 			Sleep(1500);
 			limit++;
 		}
-	} while (limit <= 5);
+	} while (limit < 5);
 
 	if (flag == 1)
 		Main_Menu();
 	else
 	{
-		// ASKING USER FOR CREATING NEW ACCOUNT
+		// ASKING USER FOR CREATING NEW ACCOUNT IF THEY LOG IN FAIL 5 TIMES
 		SET_COLOR(14);
 		cout << "\t\t\n\nYOU DO NOT HAVE AN ACCOUNT ?";
 		cout << "\t\t\nPlease create one!\n";
